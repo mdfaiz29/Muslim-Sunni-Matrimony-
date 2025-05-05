@@ -4,28 +4,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sunni Matrimony</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background-color: #f7f7f7; }
-    header { background-color: #004d40; color: white; padding: 20px; text-align: center; }
-    section { padding: 20px; }
-    form, .profile-card { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
-    button { background-color: #004d40; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+    body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f2f4f8; }
+    header { background: linear-gradient(90deg, #004d40, #00796b); color: white; padding: 40px 20px; text-align: center; }
+    header h1 { margin: 0; font-size: 2.5em; }
+    header p { font-size: 1.2em; }
+    nav { background: #00695c; padding: 10px 20px; text-align: center; color: white; font-weight: bold; }
+    section { padding: 30px 20px; }
+    form, .profile-card { max-width: 700px; margin: 30px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; }
+    button { background-color: #00796b; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; transition: background 0.3s ease; }
+    button:hover { background-color: #004d40; }
     footer { text-align: center; padding: 20px; background-color: #222; color: white; }
-    .profile-picture { text-align: center; margin: 10px 0; }
-    .profile-picture img { max-width: 150px; border-radius: 50%; }
+    .profile-picture img { max-width: 150px; border-radius: 50%; margin: 10px 0; }
     .profiles { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 30px; }
-    .profile-card { width: 300px; }
+    .profile-card { width: 300px; position: relative; }
+    .delete-btn { background-color: crimson; margin-top: 10px; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Welcome to Sunni Matrimony</h1>
-    <p>Your Trusted Platform for Halal and Compatible Marriages</p>
-  </header>  <section>
+    <h1>Sunni Matrimony</h1>
+    <p>Find your perfect match with trust and transparency</p>
+  </header>  <nav>
+    Halal, Secure & Compatible Marriages — Join Our Trusted Matrimony Platform
+  </nav>  <section>
     <h2>Create Your Profile</h2>
     <form id="profileForm">
       <label>Full Name</label>
-      <input type="text" id="name" required /><label>Gender</label>
+      <input type="text" id="name" required /><label>Phone Number</label>
+  <input type="tel" id="phone" required />
+
+  <label>Gender</label>
   <select id="gender" required>
     <option value="">--Select--</option>
     <option value="Male">Male</option>
@@ -77,6 +86,7 @@
       event.preventDefault();
 
       const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
       const gender = document.getElementById('gender').value;
       const age = document.getElementById('age').value;
       const profession = document.getElementById('profession').value;
@@ -90,11 +100,13 @@
       reader.onload = function() {
         const profileCard = document.createElement('div');
         profileCard.className = 'profile-card';
+
         profileCard.innerHTML = `
           <div class="profile-picture">
             <img src="${reader.result}" alt="Profile Picture" />
           </div>
           <h3>${name}</h3>
+          <p><strong>Phone:</strong> ${phone}</p>
           <p><strong>Gender:</strong> ${gender}</p>
           <p><strong>Age:</strong> ${age}</p>
           <p><strong>Profession:</strong> ${profession}</p>
@@ -102,10 +114,18 @@
           <p><strong>Status:</strong> ${status}</p>
           <p><strong>About:</strong> ${about}</p>
           <p><strong>Looking For:</strong> ${looking}</p>
+          <button class="delete-btn">Delete Profile</button>
         `;
+
+        const deleteBtn = profileCard.querySelector('.delete-btn');
+        deleteBtn.addEventListener('click', function() {
+          profileList.removeChild(profileCard);
+        });
+
         profileList.appendChild(profileCard);
         profileForm.reset();
       };
+
       if (pictureInput.files[0]) {
         reader.readAsDataURL(pictureInput.files[0]);
       }
